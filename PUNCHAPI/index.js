@@ -1,3 +1,15 @@
 const express = require('express');
+const mongoose = require("mongoose");
 const app = express();
-var bodyParser = require('body-parser');
+const api = require("./api");
+const port = 1337;
+
+//Virkar ekki
+//app.use("/api", api);
+mongoose.connect("localhost/punchapi");
+mongoose.connection.once("open", function(){
+      console.log("Connected To database");
+      express.listen(port, function() {
+          console.log("Web server has started on port" + port);
+      });
+});
