@@ -57,18 +57,18 @@ const PunchSchema = new mongoose.Schema({
       default: false
     },
     user_id: {
-      type: Number,
+      type: String,
       required: true
     },
     company_id: {
-      type: Number,
+      type: String,
       required: true
     }
 });
 
 
 const UserEntity = mongoose.model("Users", UsersScheme);
-const PunchEntity = mongoose.model("Punches", UsersScheme);
+const PunchEntity = mongoose.model("Punches", PunchSchema);
 const CompanyEntity = mongoose.model("Companies", CompaniesScheme);
 
 const entities = {
