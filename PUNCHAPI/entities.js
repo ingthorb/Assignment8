@@ -11,7 +11,8 @@ const UsersScheme = new mongoose.Schema({
       validate: function(value){
         //not sure
         return /m|f|o/i.test(value);
-      }
+      },
+      required: true
     }
 });
 const CompaniesScheme = new mongoose.Schema({
@@ -21,13 +22,25 @@ const CompaniesScheme = new mongoose.Schema({
   },
   punchCount: {
     type: Number,
-    required: true
+    required: true,
+    default: 10
   }
 });
+
 const PunchSchema = new mongoose.Schema({
     created: {
       type: Date,
       default: new Date()
+    },
+    used: {
+      type: Boolean,
+      default: false
+    },
+    user_id: {
+      type: [Number]
+    },
+    company_id: {
+      type: [Number]
     }
 });
 
