@@ -14,7 +14,16 @@ const UsersScheme = new mongoose.Schema({
       }
     }
 });
-
+const CompaniesScheme = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  punchCount: {
+    type: Number,
+    required: true
+  }
+});
 const PunchSchema = new mongoose.Schema({
     created: {
       type: Date,
@@ -25,8 +34,11 @@ const PunchSchema = new mongoose.Schema({
 
 const UserEntity = mongoose.model("Users", UsersScheme);
 
+const CompanyEntity = mongoose.model("Companies", CompaniesScheme);
+
 const entities = {
-    User: UserEntity
+    User: UserEntity,
+    Company: CompanyEntity
 }
 
 module.exports = entities;

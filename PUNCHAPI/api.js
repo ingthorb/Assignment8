@@ -1,22 +1,37 @@
 const express = require("express");
-const app = express.Router();
+const app = express();
 const entities = require("./entities");
 const uuid = require("node-uuid");
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
-console.log("HELLO")
 //getum sett i fleiri files
-app.get("/api/companies", function(req, res){
+app.get("/companies", function(req, res){
   console.log("Testing");
+  entities.Companies.find(function(err,docs)
+  {
+      if(err)
+      {
+        res.statusCode = 500
+        return res.send(err);
+      }
+      else {
+        //Na i allt nema token
+        console.log("TESTING");
+        //docs er array
+        //Viljum for loopa í gegn og ná í hvern og einn gæja
+        //skila svo aftur array án token
+        res.json(docs);
+      }
+  }
+);
+});
+
+app.get("/companies/:id", function(req, res){
   //TODO
 });
 
-app.get("/api/companies/:id", function(req, res){
-  //TODO
-});
-
-app.get("/api/users", function(req, res){
+app.get("/users", function(req, res){
   console.log("Testing");
   entities.User.find(function(err,docs)
   {
@@ -28,17 +43,21 @@ app.get("/api/users", function(req, res){
       else {
         //Na i allt nema token
         console.log("TESTING");
+        //docs er array
+        //Viljum for loopa í gegn og ná í hvern og einn gæja
+        //skila svo aftur array án token
+        res.json(docs);
       }
   }
 );
   //TODO
 });
 
-app.post("/api/companies",jsonParser, function(req, res){
+app.post("/companies",jsonParser, function(req, res){
   //TODO
 });
 
-app.post("/api/users",jsonParser, function(req, res){
+app.post("/users",jsonParser, function(req, res){
 
       if(req.headers.Authorization !== adminToken)
       {
@@ -71,7 +90,7 @@ app.post("/api/users",jsonParser, function(req, res){
   });
   //TODO
 });
-app.post("/api/my/punches",jsonParser, function(req, res){
+app.post("/my/punches",jsonParser, function(req, res){
   //TODO
 });
 
