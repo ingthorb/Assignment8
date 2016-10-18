@@ -94,7 +94,7 @@ app.post("/users",jsonParser, function(req, res){
   };
 
   //Byr til instance i minni
-  var entity = new entities.User(data);
+  var entity = new entities.User(User);
 
   entity.save(function(err) {
       if(err)
@@ -106,7 +106,7 @@ app.post("/users",jsonParser, function(req, res){
          res.statusCode = 201;
          return res.json({
            _id: entity._id,
-           token: data.token
+           token: User.token
          });
       }
   });
