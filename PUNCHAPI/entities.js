@@ -45,7 +45,7 @@ const CompaniesScheme = new mongoose.Schema({
  * company_id: company id
  * user_id: user id
  * created: time stamp when this punch was created
- * used: this value indicates if the user has used up the discount given to him/her after reaching the punchCount for the given company. 
+ * used: this value indicates if the user has used up the discount given to him/her after reaching the punchCount for the given company.
  */
 const PunchSchema = new mongoose.Schema({
     created: {

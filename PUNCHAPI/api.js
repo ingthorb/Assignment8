@@ -18,10 +18,20 @@ app.get("/companies", function(req, res){
         return res.json(err);
       }
       else {
-        //Na i allt nema token
-        console.log("TESTING");
+        var CompanyArray = [];
+        for(i = 0; i < docs.length; i++)
+        {
+          var temp = docs[i];
+          var company =
+          {
+              _id: temp._id,
+              name: temp.name,
+              punchCount: temp.punchCount
+          };
+          CompanyArray.push(company);
+        }
         //docs er array
-        res.json(docs);
+        res.json(CompanyArray);
       }
   }
 );
