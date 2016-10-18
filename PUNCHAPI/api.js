@@ -7,7 +7,9 @@ var jsonParser = bodyParser.json();
 
 var adminToken = "Batman";
 
-//getum sett i fleiri files
+/**
+ * Fetches a list of companies that have been added to MongoDB
+ */
 app.get("/companies", function GetCompanies(req, res){
   entities.Company.find(function(err,docs)
   {
@@ -35,7 +37,10 @@ app.get("/companies", function GetCompanies(req, res){
   }
 );
 });
-
+/**
+ * Fetches a given company that has been added to MongoDB by id.
+ * if the the we can not finde the id of the company in the db we return 404
+ */
 app.get("/companies/:id", function(req, res){
   entities.Company.find({_id: req.params.id}, function(err,docs)
   {
@@ -57,7 +62,9 @@ app.get("/companies/:id", function(req, res){
   });
 });
 
-
+/**
+ * Returns a list of all users that are in the MongoDB.
+ */
 app.get("/users", function GetUsers(req, res){
   entities.User.find(function(err,docs)
   {
@@ -87,7 +94,9 @@ app.get("/users", function GetUsers(req, res){
   }
 );
 });
-
+/**
+ * Allows administrators to add new companies to MongoDB
+ */
 app.post("/companies",jsonParser, function(req, res){
   console.log("NaNaNaNaNaNaNa" + req.headers.authorization);
   if(req.headers.authorization !== adminToken)
@@ -123,7 +132,9 @@ app.post("/companies",jsonParser, function(req, res){
   });
 
 });
-
+/**
+ * Allows administrators to add new companies to MongoDB
+ */
 app.post("/users",jsonParser, function(req, res){
   console.log("NaNaNaNaNaNaNa" + req.headers.authorization);
   if(req.headers.authorization !== adminToken)
@@ -162,6 +173,9 @@ app.post("/users",jsonParser, function(req, res){
     });
   });
 });
+/**
+ * Creates a new punch for the "current user" for a given company
+ */
 app.post("/my/punches",jsonParser, function(req, res){
   //Þurfum að ná í auth headerinn
   //Renna i gegnum user listan og finna hvort það sé user með það token
@@ -266,66 +280,13 @@ app.post("/my/punches",jsonParser, function(req, res){
                      });
                    }
                  });
-             }
-           });
-         }
-       });
-        }
-  });
-
-
-  //check what the punchCount is of the user for the company
-
-  //Create the new punch
-  var Punch =
-  {
-    user_id: UserArray._id,
-    company_id: req.body.company_id
+             });
+           }
+         });
+       }
+     });
   }
-  var entity = new entities.Punches(Punch);
-  entity.validate(function(err)
-  {
-    if(err)
-    {
-      console.log(Punch);
-      console.log("Failed in validation");
-      res.StatusCode = 412;
-      return res.json("Precondition failed");
-    }
-    console.log("Validation successful");
-    if(PunchesCount.length == CompanyArray.punchCount )
-    {
-      Punchlength = true;
-      console.log("The punches have been reached");
-      //Update the punches
-      var query = {company_id: req.company_id };
-      Punch.update(query,{ $set: {discount:'true'}},callback);
-    }
-    entity.save(function(err) {
-      if(err)
-      {
-        res.statusCode = 500;
-        return res.json("Server error");
-      }
-      else {
-        console.log("Save a sucess");
-        if(Punchlength)
-        {
-          //If the punch count has been reached
-          res.statusCode = 201;
-          return res.json({
-            _id: entity._id,
-            discount: true
-          });
-        }
-        //If the punch count hasn't been reached
-        res.statusCode = 201;
-        return res.json({
-          _id: entity._id,
-        });
-      }
-    });
-  });
+});
 });
 
 module.exports = app;
