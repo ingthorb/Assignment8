@@ -37,7 +37,7 @@ app.get("/companies", function GetCompanies(req, res){
 });
 
 app.get("/companies/:id", function(req, res){
-  entities.Company.find({_id: id}, function(err,docs)
+  entities.Company.find({_id: req.params.id}, function(err,docs)
   {
       if(err)
       {
@@ -45,10 +45,16 @@ app.get("/companies/:id", function(req, res){
         return res.json(err);
       }
       else {
-        res.json(docs);
+        if(docs != null && docs.length > 0)
+        {
+            res.json(docs);
+        }
+        else{
+          res.statusCode = 404
+          return res.json("Company not found");
+        }
       }
-  }
-);
+  });
 });
 
 
