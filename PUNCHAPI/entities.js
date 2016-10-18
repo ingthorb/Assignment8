@@ -57,10 +57,12 @@ const PunchSchema = new mongoose.Schema({
       default: false
     },
     user_id: {
-      type: [Number]
+      type: Number,
+      required: true
     },
     company_id: {
-      type: [Number]
+      type: Number,
+      required: true
     }
 });
 
