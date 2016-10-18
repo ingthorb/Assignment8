@@ -42,8 +42,8 @@ app.get("/companies/:id", function(req, res){
 );
 });
 
+
 app.get("/users", function(req, res){
-  console.log("Testing");
   entities.User.find(function(err,docs)
   {
       if(err)
@@ -52,9 +52,6 @@ app.get("/users", function(req, res){
         return res.json(err);
       }
       else {
-        //Na i allt nema token
-        console.log("TESTING");
-        //docs er array
         var UserArray = [];
         for(i = 0; i < docs.length; i++)
         {
@@ -77,6 +74,32 @@ app.get("/users", function(req, res){
 });
 
 app.post("/companies",jsonParser, function(req, res){
+  console.log(req.headers.authorization);
+  if(req.headers.authorization !== adminToken)
+  {
+    res.statusCode = 401;
+    return res.json("Not Authorized");
+  }
+  var Company = {
+    name: req.body.name,
+    punchCount: req.body.punchCount
+  };
+
+  var entity = new entities.Company(Company);
+
+  entity.save(function(err) {
+      if(err)
+      {
+        res.statusCode = 412;
+        return res.json("Values incorrect");
+      }
+      else {
+         res.statusCode = 201;
+         return res.json({
+           _id: entity._id,
+         });
+      }
+  });
 });
 
 app.post("/users",jsonParser, function(req, res){
@@ -93,14 +116,13 @@ app.post("/users",jsonParser, function(req, res){
     token: uuid.v1()
   };
 
-  //Byr til instance i minni
   var entity = new entities.User(User);
 
   entity.save(function(err) {
       if(err)
       {
         res.statusCode = 412;
-        return res.json("Save failed");
+        return res.json("Values incorrect");
       }
       else {
          res.statusCode = 201;

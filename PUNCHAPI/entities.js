@@ -9,7 +9,6 @@ const UsersScheme = new mongoose.Schema({
     gender: {
       type: String,
       validate: function(value){
-        //not sure
         return /m|f|o/i.test(value);
       },
       required: true
