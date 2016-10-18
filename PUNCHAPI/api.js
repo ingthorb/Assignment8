@@ -148,7 +148,7 @@ app.post("/users",jsonParser, function(req, res){
     gender: req.body.gender,
     token: uuid.v1()
   };
-
+  console.log(User);
   var entity = new entities.User(User);
   entity.validate(function(err)
   {
@@ -210,7 +210,7 @@ app.post("/my/punches",jsonParser, function(req, res){
     else {
       console.log("Users Found");
        UserArray = docs[0];
-       entities.Company.find({_id: req.company_id}, function(err,docs)
+       entities.Company.find({_id: req.body.company_id}, function(err,docs)
        {
          if(err)
          {
@@ -231,7 +231,6 @@ app.post("/my/punches",jsonParser, function(req, res){
              }
              else {
                PunchesCount = docs;
-               //Create the new punch
                var Punch =
                {
                  user_id: UserArray._id,
@@ -244,7 +243,7 @@ app.post("/my/punches",jsonParser, function(req, res){
                  {
                    console.log(Punch);
                    console.log("Failed in validation");
-                   res.StatusCode = 412;
+                   res.statusCode = 412;
                    return res.json("Precondition failed");
                  }
                  console.log("Validation successful");
