@@ -1,11 +1,11 @@
 const express = require('express');
 const mongoose = require("mongoose");
 const app = express();
-//const api = require("./api");
+const api = require('./api');
 const port = 1337;
 
-//Virkar ekki
-//app.use("/api", api);
+
+app.use('/api', api);
 mongoose.connect("localhost/punchapi");
 mongoose.connection.once("open", function(){
       console.log("Connected To database");

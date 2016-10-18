@@ -29,4 +29,4 @@ const entities = {
     User: UserEntity
 }
 
-module.export = entities;
+module.exports = entities;

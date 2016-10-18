@@ -1,24 +1,22 @@
 const express = require("express");
-const app = express();
+const app = express.Router();
 const entities = require("./entities");
 const uuid = require("node-uuid");
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
+console.log("HELLO")
 //getum sett i fleiri files
-app.get("/api/companies", function(req, res)
-{
+app.get("/api/companies", function(req, res){
   console.log("Testing");
   //TODO
 });
 
-app.get("/api/companies/:id", function(req, res)
-{
+app.get("/api/companies/:id", function(req, res){
   //TODO
 });
 
-app.get("/api/users", function(req, res)
-{
+app.get("/api/users", function(req, res){
   console.log("Testing");
   entities.User.find(function(err,docs)
   {
@@ -36,13 +34,11 @@ app.get("/api/users", function(req, res)
   //TODO
 });
 
-app.post("/api/companies",jsonParser, function(req, res)
-{
+app.post("/api/companies",jsonParser, function(req, res){
   //TODO
 });
 
-app.post("/api/users",jsonParser, function(req, res)
-{
+app.post("/api/users",jsonParser, function(req, res){
 
       if(req.headers.Authorization !== adminToken)
       {
@@ -75,10 +71,9 @@ app.post("/api/users",jsonParser, function(req, res)
   });
   //TODO
 });
-app.post("/api/my/punches",jsonParser, function(req, res)
-{
+app.post("/api/my/punches",jsonParser, function(req, res){
   //TODO
 });
 
-
-module.export = app;
+console.log("HELLO2")
+module.exports = app;
