@@ -49,14 +49,12 @@ const UserEntity = mongoose.model("Users", UsersScheme);
 
 const PunchEntity = mongoose.model("Punches", UsersScheme);
 
-
 const CompanyEntity = mongoose.model("Companies", CompaniesScheme);
 
 const entities = {
     User: UserEntity,
     Company: CompanyEntity,
     Punches: PunchEntity
-
 }
 
 module.exports = entities;

@@ -5,22 +5,22 @@ const uuid = require("node-uuid");
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
+var adminToken = "Batman";
+
 //getum sett i fleiri files
 app.get("/companies", function(req, res){
   console.log("Testing");
-  entities.Companies.find(function(err,docs)
+  entities.Company.find(function(err,docs)
   {
       if(err)
       {
         res.statusCode = 500
-        return res.send(err);
+        return res.json(err);
       }
       else {
         //Na i allt nema token
         console.log("TESTING");
         //docs er array
-        //Viljum for loopa í gegn og ná í hvern og einn gæja
-        //skila svo aftur array án token
         res.json(docs);
       }
   }
@@ -28,7 +28,18 @@ app.get("/companies", function(req, res){
 });
 
 app.get("/companies/:id", function(req, res){
-  //TODO
+  entities.Company.find({_id: id}, function(err,docs)
+  {
+      if(err)
+      {
+        res.statusCode = 404
+        return res.json(err);
+      }
+      else {
+        res.json(docs);
+      }
+  }
+);
 });
 
 app.get("/users", function(req, res){
@@ -38,31 +49,42 @@ app.get("/users", function(req, res){
       if(err)
       {
         res.statusCode = 500
-        return res.send(err);
+        return res.json(err);
       }
       else {
         //Na i allt nema token
         console.log("TESTING");
         //docs er array
+        var UserArray = [];
+        for(i = 0; i < docs.length; i++)
+        {
+          var temp = docs[i];
+          var user =
+          {
+              _id: temp._id,
+              name: temp.name,
+              gender: temp.gender
+          };
+          UserArray.push(user);
+        }
+
         //Viljum for loopa í gegn og ná í hvern og einn gæja
         //skila svo aftur array án token
-        res.json(docs);
+        res.json(UserArray);
       }
   }
 );
-  //TODO
 });
 
 app.post("/companies",jsonParser, function(req, res){
-  //TODO
 });
 
 app.post("/users",jsonParser, function(req, res){
-
-      if(req.headers.Authorization !== adminToken)
-      {
-        res.statusCode = 401;
-        return res.send("Not Authorized");
+    console.log(req.headers.authorization);
+    if(req.headers.authorization !== adminToken)
+    {
+      res.statusCode = 401;
+      return res.json("Not Authorized");
     }
 
   var User = {
@@ -78,21 +100,19 @@ app.post("/users",jsonParser, function(req, res){
       if(err)
       {
         res.statusCode = 412;
-        return res.send("Save failed");
+        return res.json("Save failed");
       }
       else {
          res.statusCode = 201;
-         return res.send({
+         return res.json({
            _id: entity._id,
            token: data.token
          });
       }
   });
-  //TODO
 });
 app.post("/my/punches",jsonParser, function(req, res){
-  //TODO
 });
 
-console.log("HELLO2")
+
 module.exports = app;
