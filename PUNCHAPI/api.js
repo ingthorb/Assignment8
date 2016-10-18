@@ -6,18 +6,20 @@ var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 
 //getum sett i fleiri files
-app.get("/companies", function(req, res)
+app.get("/api/companies", function(req, res)
+{
+  console.log("Testing");
+  //TODO
+});
+
+app.get("/api/companies/:id", function(req, res)
 {
   //TODO
 });
 
-app.get("/companies/:id", function(req, res)
+app.get("/api/users", function(req, res)
 {
-  //TODO
-});
-
-app.get("/users", function(req, res)
-{
+  console.log("Testing");
   entities.User.find(function(err,docs)
   {
       if(err)
@@ -27,18 +29,19 @@ app.get("/users", function(req, res)
       }
       else {
         //Na i allt nema token
+        console.log("TESTING");
       }
   }
 );
   //TODO
 });
 
-app.post("/companies",jsonParser, function(req, res)
+app.post("/api/companies",jsonParser, function(req, res)
 {
   //TODO
 });
 
-app.post("/users",jsonParser, function(req, res)
+app.post("/api/users",jsonParser, function(req, res)
 {
 
       if(req.headers.Authorization !== adminToken)
@@ -72,7 +75,7 @@ app.post("/users",jsonParser, function(req, res)
   });
   //TODO
 });
-app.post("/my/punches",jsonParser, function(req, res)
+app.post("/api/my/punches",jsonParser, function(req, res)
 {
   //TODO
 });
