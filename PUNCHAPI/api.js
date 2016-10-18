@@ -147,8 +147,8 @@ app.post("/users",jsonParser, function(req, res){
     entity.save(function(err) {
         if(err)
         {
-          res.statusCode = 412;
-          return res.json("Values incorrect");
+          res.statusCode = 500;
+          return res.json("Server error");
         }
         else {
            res.statusCode = 201;
@@ -169,31 +169,36 @@ app.post("/my/punches",jsonParser, function(req, res){
   //If count a punches er jafnt og punchCount skila discount = true as well as marking
   //the true
   //annars 201 og punchid
+  console.log(req.headers.authorization);
   var tempToken = req.headers.authorization;
+  if(tempToken === undefined)
+  {
+    res.statusCode = 401
+    return res.json("The token is missing");
+  }
   //se til hvort þurfi
   var UserExists = false;
-  var UserArray = GetUsers();
+  var UserArray = [];
+  var PunchesCount = [];
+  var response;
   console.log(UserArray);
   entities.User.find(function(err,docs)
   {
       if(err)
       {
-        res.statusCode = 500
+        res.statusCode = 401
         return res.json(err);
       }
       else {
         UserArray = docs;
         }
   }
-  console.log(req.headers.authorization);
   for(i = 0; i < UserArray.length; i++)
   {
     var temp = UserArray[i];
     if(temp.token === tempToken )
     {
       UserExists = true;
-      //User exists
-      //find the company
       entities.Company.find({_id: req.company_id}, function(err,docs)
       {
           if(err)
@@ -202,9 +207,65 @@ app.post("/my/punches",jsonParser, function(req, res){
             return res.json(err);
           }
           else {
-            res.json(docs);
+            var CompanyArray = docs;
           }
       }
+      //check what the punchCount is of the user for the company
+      entities.Punches.find({company_id: req.company_id}, function(err,docs)
+      {
+          if(err)
+          {
+            res.statusCode = 404
+            return res.json(err);
+          }
+          else {
+             PunchesCount = docs;
+          }
+      }
+      var Punch =
+      {
+        user_id: req.body.user_id,
+        company_id: req.body.user.company_id
+      }
+      var entity = new entities.Punches(Punch);
+      entity.validate(function(err)
+      {
+        if(err)
+        {
+            res.StatusCode = 412;
+            return res.json("Precondition failed");
+        }
+        entity.save(function(err) {
+            if(err)
+            {
+              res.statusCode = 500;
+              return res.json("Server error");
+            }
+            else {
+              if(PunchesCount.length == CompanyArray.punchCount )
+              {
+                console.log("The punches have been reached");
+                //Add discount: true into the response
+                //change the used to true for every punch
+
+                for(i = 0; i < PunchesCount.length; i++)
+                {
+
+                }
+                res.statusCode = 201;
+                return res.json({
+                  _id: entity._id,
+                  discount: true
+                });
+              }
+               res.statusCode = 201;
+               return res.json({
+                 _id: entity._id
+               });
+            }
+        });
+
+      //bua til svo
 
     }
   }
