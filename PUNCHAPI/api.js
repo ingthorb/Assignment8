@@ -63,7 +63,7 @@ app.get("/companies/:id", function (req, res) {
 /**
 * Returns a list of all users that are in the MongoDB.
 */
-app.get("/users", function GetUsers(req, res) {
+app.get("/users", function(req, res) {
   entities.User.find(function (err, docs) {
     if (err) {
       res.statusCode = 500
@@ -167,7 +167,6 @@ app.post("/my/punches", jsonParser, function (req, res) {
 
   var Punchlength = false;
   var PunchesCount = [];
-  var Punch;
   var UserArray = {};
   entities.User.find({ token: tempToken }, function (err, docs) {
 
@@ -180,9 +179,7 @@ app.post("/my/punches", jsonParser, function (req, res) {
         res.statusCode = 404
         return res.json("User not found");
       }
-
       UserArray = docs[0];
-
       entities.Company.find({ _id: req.body.company_id }, function (err, docs) {
         if (err) {
           res.statusCode = 404
@@ -218,10 +215,7 @@ app.post("/my/punches", jsonParser, function (req, res) {
                 return res.json(err);
               }
               else {
-                console.log(docs);
                 PunchesCount = docs;
-                console.log(PunchesCount.length);
-                console.log(CompanyArray.punchCount);
                 if (PunchesCount.length == CompanyArray.punchCount) {
                   Punchlength = true;
                   //Update the punches
@@ -232,7 +226,7 @@ app.post("/my/punches", jsonParser, function (req, res) {
                       return res.json("Server error");
                     }
                     else {
-                      console.log(res);
+                    //  console.log(res);
                     }
                   });
                 }
