@@ -21,17 +21,17 @@ app.get("/companies", function GetCompanies(req, res) {
       for (i = 0; i < docs.length; i++) {
         var temp = docs[i];
         var company =
-          {
-            _id: temp._id,
-            name: temp.name,
-            punchCount: temp.punchCount
-          };
+        {
+          _id: temp._id,
+          name: temp.name,
+          punchCount: temp.punchCount
+        };
         CompanyArray.push(company);
       }
       res.json(CompanyArray);
     }
   }
-  );
+);
 });
 /**
 * Fetches a given company that has been added to MongoDB by id.
@@ -45,7 +45,12 @@ app.get("/companies/:id", function (req, res) {
     }
     else {
       if (docs != null && docs.length > 0) {
-        res.json(docs);
+        var company = {
+          _id: docs[0]._id,
+          name: docs[0].name,
+          punchCount: docs[0].punchCount
+        }
+        res.json(company);
       }
       else {
         res.statusCode = 404
@@ -69,17 +74,17 @@ app.get("/users", function GetUsers(req, res) {
       for (i = 0; i < docs.length; i++) {
         var temp = docs[i];
         var user =
-          {
-            _id: temp._id,
-            name: temp.name,
-            gender: temp.gender
-          };
+        {
+          _id: temp._id,
+          name: temp.name,
+          gender: temp.gender
+        };
         UserArray.push(user);
       }
       res.json(UserArray);
     }
   }
-  );
+);
 });
 /**
 * Allows administrators to add new companies to MongoDB
@@ -190,9 +195,9 @@ app.post("/my/punches", jsonParser, function (req, res) {
           }
           var CompanyArray = docs[0];
           var punch = {
-              user_id: UserArray._id,
-              company_id: req.body.company_id
-            }
+            user_id: UserArray._id,
+            company_id: req.body.company_id
+          }
           var entity = new entities.Punches(punch);
           entity.validate(function (err) {
             if (err) {
@@ -207,21 +212,27 @@ app.post("/my/punches", jsonParser, function (req, res) {
             return res.json("Server error");
           }
           else {
-            entities.Punches.find({ company_id: req.body.company_id }, function (err, docs) {
+            entities.Punches.find({ company_id: req.body.company_id , used: false}, function (err, docs) {
               if (err) {
                 res.statusCode = 404
                 return res.json(err);
               }
               else {
+                console.log(docs);
                 PunchesCount = docs;
+                console.log(PunchesCount.length);
+                console.log(CompanyArray.punchCount);
                 if (PunchesCount.length == CompanyArray.punchCount) {
                   Punchlength = true;
                   //Update the punches
-                  var query = { company_id: req.body.company_id };
-                  entity.update(query, { $set: { discount: 'true' } }, function (err) {
+                  var query = { company_id: req.body.company_id, used: false };
+                  entities.Punches.update(query, { $set: { used: true } },options = {multi:true}, function (err,res) {
                     if (err) {
                       res.statusCode = 500;
                       return res.json("Server error");
+                    }
+                    else {
+                      console.log(res);
                     }
                   });
                 }
