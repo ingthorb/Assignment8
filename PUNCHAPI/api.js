@@ -96,7 +96,7 @@ app.post("/companies", jsonParser, function (req, res) {
   var entity = new entities.Company(Company);
   entity.validate(function (err) {
     if (err) {
-      res.StatusCode = 412;
+      res.statusCode = 412;
       return res.json("Precondition failed");
     }
     entity.save(function (err) {
@@ -131,7 +131,7 @@ app.post("/users", jsonParser, function (req, res) {
   var entity = new entities.User(User);
   entity.validate(function (err) {
     if (err) {
-      res.StatusCode = 412;
+      res.statusCode = 412;
       return res.json("Precondition failed");
     }
     entity.save(function (err) {
